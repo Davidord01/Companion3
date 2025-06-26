@@ -1,12 +1,13 @@
 /**
- * Archivo principal de bootstrap para la aplicación Angular
- * The Last of Us Temporada 2 - Experiencia Web Inmersiva
- * Ahora incluye la nueva sección de Videos
+ * Enhanced main application file
+ * Now includes HTTP client and video platform functionality
  */
 
 import { Component } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { HttpInterceptorFn, HttpRequest, HttpHandlerFn } from '@angular/common/http';
 
 import { NavegacionComponent } from './components/navegacion/navegacion.component';
 import { HeroComponent } from './components/hero/hero.component';
@@ -17,8 +18,33 @@ import { VideosComponent } from './components/videos/videos.component';
 import { FooterComponent } from './components/footer/footer.component';
 
 /**
- * Componente raíz de la aplicación
- * Orquesta todos los componentes principales de la página
+ * HTTP Interceptor for authentication
+ */
+const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: HttpHandlerFn) => {
+  // Add auth token to requests if available
+  const token = localStorage.getItem('accessToken');
+  
+  if (token && req.url.includes('/api/')) {
+    const authReq = req.clone({
+      headers: req.headers.set('Authorization', `Bearer ${token}`)
+    });
+    return next(authReq);
+  }
+  
+  return next(req);
+};
+
+/**
+ * HTTP Interceptor for error handling
+ */
+const errorInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: HttpHandlerFn) => {
+  return next(req).pipe(
+    // You can add global error handling here if needed
+  );
+};
+
+/**
+ * Main application component
  */
 @Component({
   selector: 'app-root',
@@ -33,30 +59,29 @@ import { FooterComponent } from './components/footer/footer.component';
     FooterComponent
   ],
   template: `
-    <!-- Estructura principal de la página -->
     <div class="app-container">
-      <!-- Navegación principal -->
+      <!-- Navigation -->
       <app-navegacion></app-navegacion>
       
-      <!-- Contenido principal -->
+      <!-- Main content -->
       <main class="main-content">
-        <!-- Sección hero/banner -->
+        <!-- Hero section -->
         <app-hero></app-hero>
         
-        <!-- Sección de personajes -->
+        <!-- Characters section -->
         <app-personajes></app-personajes>
         
-        <!-- Timeline de eventos con reproductores de audio -->
+        <!-- Timeline section -->
         <app-timeline></app-timeline>
         
-        <!-- Galería de imágenes -->
+        <!-- Gallery section -->
         <app-galeria></app-galeria>
         
-        <!-- Sección de videos (inicialmente oculta) -->
+        <!-- Videos section (initially hidden) -->
         <app-videos style="display: none;"></app-videos>
       </main>
       
-      <!-- Pie de página -->
+      <!-- Footer -->
       <app-footer></app-footer>
     </div>
   `,
@@ -74,12 +99,15 @@ import { FooterComponent } from './components/footer/footer.component';
   `]
 })
 export class App {
-  title = 'The Last of Us Temporada 2 - Plataforma Multimedia';
+  title = 'The Last of Us Temporada 2 - Plataforma Multimedia Completa';
 }
 
-// Bootstrap de la aplicación con animaciones habilitadas
+// Bootstrap application with enhanced providers
 bootstrapApplication(App, {
   providers: [
-    provideAnimations() // Habilita las animaciones de Angular
+    provideAnimations(),
+    provideHttpClient(
+      withInterceptors([authInterceptor, errorInterceptor])
+    )
   ]
 }).catch(err => console.error('Error al iniciar la aplicación:', err));
