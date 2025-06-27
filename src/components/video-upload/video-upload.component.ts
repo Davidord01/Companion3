@@ -97,10 +97,10 @@ interface UploadError {
               [(ngModel)]="metadatosArchivo.nombre"
               placeholder="Ingresa un nombre descriptivo"
               class="form-input"
-              [class.error]="errores.nombre"
+              [class.error]="errores['nombre']"
             >
-            <div class="error-message" *ngIf="errores.nombre">
-              {{ errores.nombre }}
+            <div class="error-message" *ngIf="errores['nombre']">
+              {{ errores['nombre'] }}
             </div>
           </div>
 
@@ -162,11 +162,11 @@ interface UploadError {
               [(ngModel)]="datosYoutube.url"
               placeholder="https://www.youtube.com/watch?v=..."
               class="form-input"
-              [class.error]="errores.url"
+              [class.error]="errores['url']"
               (input)="validarUrlYoutube()"
             >
-            <div class="error-message" *ngIf="errores.url">
-              {{ errores.url }}
+            <div class="error-message" *ngIf="errores['url']">
+              {{ errores['url'] }}
             </div>
             <div class="success-message" *ngIf="urlYoutubeValida">
               ✅ URL de YouTube válida
@@ -181,10 +181,10 @@ interface UploadError {
               [(ngModel)]="datosYoutube.nombre"
               placeholder="Nombre personalizado para el video"
               class="form-input"
-              [class.error]="errores.nombre"
+              [class.error]="errores['nombre']"
             >
-            <div class="error-message" *ngIf="errores.nombre">
-              {{ errores.nombre }}
+            <div class="error-message" *ngIf="errores['nombre']">
+              {{ errores['nombre'] }}
             </div>
           </div>
 
@@ -834,7 +834,7 @@ export class VideoUploadComponent {
   validarUrlYoutube() {
     this.urlYoutubeValida = false;
     this.videoIdYoutube = null;
-    this.errores.url = '';
+    this.errores['url'] = '';
 
     if (!this.datosYoutube.url.trim()) {
       return;
@@ -845,10 +845,10 @@ export class VideoUploadComponent {
       if (this.videoIdYoutube) {
         this.urlYoutubeValida = true;
       } else {
-        this.errores.url = 'No se pudo extraer el ID del video de YouTube';
+        this.errores['url'] = 'No se pudo extraer el ID del video de YouTube';
       }
     } else {
-      this.errores.url = 'URL de YouTube no válida';
+      this.errores['url'] = 'URL de YouTube no válida';
     }
   }
 
