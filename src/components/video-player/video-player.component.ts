@@ -44,9 +44,9 @@ interface PlayerState {
           (loadedmetadata)="onLoadedMetadata()"
           (timeupdate)="onTimeUpdate()"
           (progress)="onProgress()"
-          (ended)="onEnded()"
-          (play)="onPlay()"
-          (pause)="onPause()"
+          (ended)="handleEnded()"
+          (play)="handlePlay()"
+          (pause)="handlePause()"
           (volumechange)="onVolumeChange()"
           (error)="onError($event)"
           class="video-element"
@@ -786,20 +786,20 @@ export class VideoPlayerComponent implements OnInit, OnDestroy {
     }
   }
 
-  onPlay() {
+  handlePlay() {
     this.playerState.playing = true;
     this.showControlsTemporarily();
     this.onPlay.emit();
   }
 
-  onPause() {
+  handlePause() {
     this.playerState.playing = false;
     this.controlsVisible = true;
     this.clearControlsTimer();
     this.onPause.emit();
   }
 
-  onEnded() {
+  handleEnded() {
     this.playerState.playing = false;
     this.playerState.currentTime = 0;
     this.controlsVisible = true;
