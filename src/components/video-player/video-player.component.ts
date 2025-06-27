@@ -48,7 +48,7 @@ interface PlayerState {
           (play)="handlePlay()"
           (pause)="handlePause()"
           (volumechange)="onVolumeChange()"
-          (error)="onError($event)"
+          (error)="handleVideoError($event)"
           class="video-element"
         >
           Tu navegador no soporta la reproducción de video.
@@ -813,7 +813,7 @@ export class VideoPlayerComponent implements OnInit, OnDestroy {
     }
   }
 
-  onError(event: Event) {
+  handleVideoError(event: Event) {
     const video = event.target as HTMLVideoElement;
     let errorMessage = 'Error desconocido al reproducir el video';
     
