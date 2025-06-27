@@ -44,11 +44,11 @@ interface PlayerState {
           (loadedmetadata)="onLoadedMetadata()"
           (timeupdate)="onTimeUpdate()"
           (progress)="onProgress()"
-          (ended)="handleEnded()"
-          (play)="handlePlay()"
-          (pause)="handlePause()"
+          (ended)="onEnded()"
+          (play)="onPlay()"
+          (pause)="onPause()"
           (volumechange)="onVolumeChange()"
-          (error)="handleVideoError($event)"
+          (error)="onError($event)"
           class="video-element"
         >
           Tu navegador no soporta la reproducción de video.
@@ -786,20 +786,20 @@ export class VideoPlayerComponent implements OnInit, OnDestroy {
     }
   }
 
-  handlePlay() {
+  onPlay() {
     this.playerState.playing = true;
     this.showControlsTemporarily();
     this.onPlay.emit();
   }
 
-  handlePause() {
+  onPause() {
     this.playerState.playing = false;
     this.controlsVisible = true;
     this.clearControlsTimer();
     this.onPause.emit();
   }
 
-  handleEnded() {
+  onEnded() {
     this.playerState.playing = false;
     this.playerState.currentTime = 0;
     this.controlsVisible = true;
@@ -813,7 +813,7 @@ export class VideoPlayerComponent implements OnInit, OnDestroy {
     }
   }
 
-  handleVideoError(event: Event) {
+  onError(event: Event) {
     const video = event.target as HTMLVideoElement;
     let errorMessage = 'Error desconocido al reproducir el video';
     
